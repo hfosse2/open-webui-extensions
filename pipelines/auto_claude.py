@@ -2,10 +2,10 @@
 title: Auto Anthropic
 author: @nokodo
 description: clean, plug and play Claude manifold pipeline with support for all the latest features from Anthropic
-version: 0.4.2
-required_open_webui_version: ">= 0.5.0"
+version: 0.5.0
+required_open_webui_version: >= 0.9.0
 license: see extension documentation file `auto_claude.md` (License section) for the licensing terms.
-repository_url: https://nokodo.net/github/open-webui-extensions
+repository_url: https://github.com/hfosse2/open-webui-extensions
 funding_url: https://ko-fi.com/nokodo
 """
 
@@ -60,40 +60,54 @@ REASONING_EFFORT_BUDGET_TOKEN_MAP = {
 MAX_COMBINED_TOKENS = 128_000
 
 MODEL_SPECS = {
+    "claude-opus-4-8": {
+        "max_output_tokens": 128_000,
+        "context_length": 1_000_000,
+        "supports_thinking": True,
+    },
+    "claude-opus-4-7": {
+        "max_output_tokens": 128_000,
+        "context_length": 1_000_000,
+        "supports_thinking": True,
+    },
+    "claude-opus-4-6": {
+        "max_output_tokens": 128_000,
+        "context_length": 1_000_000,
+        "supports_thinking": True,
+    },
+    "claude-sonnet-4-6": {
+        "max_output_tokens": 128_000,
+        "context_length": 1_000_000,
+        "supports_thinking": True,
+    },
     "claude-sonnet-4-5-20250929": {
         "max_output_tokens": 64_000,
+        "context_length": 200_000,
         "supports_thinking": True,
     },
-    "claude-sonnet-4-5": {"max_output_tokens": 64_000, "supports_thinking": True},
-    "claude-opus-4-5": {"max_output_tokens": 64_000, "supports_thinking": True},
+    "claude-sonnet-4-5": {
+        "max_output_tokens": 64_000,
+        "context_length": 200_000,
+        "supports_thinking": True,
+    },
+    "claude-opus-4-5-20251101": {
+        "max_output_tokens": 64_000,
+        "context_length": 200_000,
+        "supports_thinking": True,
+    },
+    "claude-opus-4-5": {
+        "max_output_tokens": 64_000,
+        "context_length": 200_000,
+        "supports_thinking": True,
+    },
     "claude-haiku-4-5-20251001": {
         "max_output_tokens": 64_000,
+        "context_length": 200_000,
         "supports_thinking": True,
     },
-    "claude-haiku-4-5": {"max_output_tokens": 64_000, "supports_thinking": True},
-    "claude-opus-4-1-20250805": {
-        "max_output_tokens": 32_000,
-        "supports_thinking": True,
-    },
-    "claude-opus-4-1": {"max_output_tokens": 32_000, "supports_thinking": True},
-    "claude-sonnet-4-20250514": {
+    "claude-haiku-4-5": {
         "max_output_tokens": 64_000,
-        "supports_thinking": True,
-    },
-    "claude-sonnet-4-0": {"max_output_tokens": 64_000, "supports_thinking": True},
-    "claude-sonnet-4-latest": {
-        "max_output_tokens": 64_000,
-        "supports_thinking": True,
-    },
-    "claude-opus-4-20250514": {"max_output_tokens": 32_000, "supports_thinking": True},
-    "claude-opus-4-0": {"max_output_tokens": 32_000, "supports_thinking": True},
-    "claude-opus-4-latest": {"max_output_tokens": 32_000, "supports_thinking": True},
-    "claude-3-7-sonnet-20250219": {
-        "max_output_tokens": 64_000,
-        "supports_thinking": True,
-    },
-    "claude-3-7-sonnet-latest": {
-        "max_output_tokens": 64_000,
+        "context_length": 200_000,
         "supports_thinking": True,
     },
 }
@@ -210,7 +224,7 @@ class Pipe:
                 {
                     "id": f"anthropic-native/{model_name}",
                     "name": model_name,
-                    "context_length": 200_000,
+                    "context_length": specs.get("context_length", 200_000),
                     "supports_vision": True,
                     "supports_thinking": specs["supports_thinking"],
                     "max_output_tokens": specs["max_output_tokens"],
@@ -450,7 +464,7 @@ class Pipe:
         host_tools: Optional[dict[str, Any]] = None,
     ) -> AsyncIterator | str:
         if model is None:
-            model = "claude-sonnet-4-latest"
+            model = "claude-sonnet-4-6"
         if max_tokens is None:
             max_tokens = 16_000
         if temperature is None:
@@ -997,7 +1011,7 @@ class Pipe:
     def setup_params(
         self, body: dict[str, Any]
     ) -> tuple[str, int, Optional[dict[str, Any]]]:
-        model_full = body.get("model", "anthropic-native/claude-sonnet-4-5-20250929")
+        model_full = body.get("model", "anthropic-native/claude-sonnet-4-6")
         model = model_full.split("/", 1)[1] if "/" in model_full else model_full
         reasoning_effort = body.get("reasoning_effort", "none")
         budget_tokens = REASONING_EFFORT_BUDGET_TOKEN_MAP.get(reasoning_effort)

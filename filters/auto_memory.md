@@ -106,7 +106,7 @@ See full logic and more cases in code.
 
 ## 💖 Support & Feedback
 
-- [Open an Issue / Suggest Improvements](https://nokodo.net/github/open-webui-extensions)
+- [Open an Issue / Suggest Improvements](https://github.com/hfosse2/open-webui-extensions)
 - [Buy me a coffee ☕](https://ko-fi.com/nokodo)
 
 ---

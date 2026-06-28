@@ -1,3 +1,8 @@
-open-webui
-pydantic
+open-webui>=0.9.0
+pydantic>=2.0
 fastapi
+aiohttp
+anthropic
+Pillow
+websockets
+e2b_code_interpreter

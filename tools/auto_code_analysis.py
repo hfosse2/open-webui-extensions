@@ -5,9 +5,9 @@ description: execute Python code to perform any analysis, file operations, or da
 author_email: nokodo@nokodo.net
 author_url: https://nokodo.net
 funding_url: https://ko-fi.com/nokodo
-repository_url: https://nokodo.net/github/open-webui-extensions
-version: 1.0.1
-required_open_webui_version: >= 0.6.0
+repository_url: https://github.com/hfosse2/open-webui-extensions
+version: 1.1.0
+required_open_webui_version: >= 0.9.0
 requirements: aiohttp, websockets, e2b_code_interpreter
 license: see extension documentation file `auto_code_analysis.md` (License section) for the licensing terms.
 """

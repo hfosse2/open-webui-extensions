@@ -144,7 +144,7 @@ The pipeline handles both streaming and non-streaming tool calls seamlessly.
 
 ## 💖 Support & Feedback
 
-- [Open an Issue / Suggest Improvements](https://nokodo.net/github/open-webui-extensions)
+- [Open an Issue / Suggest Improvements](https://github.com/hfosse2/open-webui-extensions)
 - [Buy me a coffee ☕](https://ko-fi.com/nokodo)
 
 ---

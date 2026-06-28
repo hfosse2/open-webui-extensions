@@ -207,7 +207,7 @@ Configuration is handled through Open WebUI's native image settings—no additio
 
 ## 💖 Support & Feedback
 
-- [Open an Issue / Suggest Improvements](https://nokodo.net/github/open-webui-extensions)
+- [Open an Issue / Suggest Improvements](https://github.com/hfosse2/open-webui-extensions)
 - [Buy me a coffee ☕](https://ko-fi.com/nokodo)
 
 ---

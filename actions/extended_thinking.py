@@ -2,8 +2,8 @@
 title: Extended Thinking Toggle
 author: @nokodo
 description: Toggle extended thinking mode with configurable reasoning effort
-version: 1.0.0-alpha1
-required_open_webui_version: ">= 0.5.0"
+version: 1.0.0
+required_open_webui_version: >= 0.9.0
 license: see extension documentation file `extended_thinking.md` (License section) for the licensing terms.
 """
 
@@ -16,9 +16,9 @@ class Action:
     """Action to toggle extended thinking mode with configurable reasoning effort."""
 
     class Valves(BaseModel):
-        reasoning_effort: Literal["minimal", "low", "medium", "high", "max"] = Field(
+        reasoning_effort: Literal["low", "medium", "high", "max"] = Field(
             default="medium",
-            description="reasoning effort level: minimal, low, medium, high, max",
+            description="reasoning effort level: low, medium, high, max",
         )
 
     def __init__(self):
@@ -32,7 +32,7 @@ class Action:
         __event_call__: Optional[Callable[[Any], Awaitable[Any]]] = None,
         __model__: Optional[dict[str, Any]] = None,
     ) -> dict[str, Any]:
-        """toggle extended thinking mode."""
+        """Toggle extended thinking mode."""
 
         reasoning_effort = self.valves.reasoning_effort
 
@@ -48,5 +48,5 @@ class Action:
             )
 
         return {
-            "content": f"💭 **extended thinking mode**\n\nreasoning effort: `{reasoning_effort}`\n\nthis will apply to your next message.",
+            "content": f"**Extended thinking mode**\n\nReasoning effort: `{reasoning_effort}`\n\nThis will apply to your next message.",
         }

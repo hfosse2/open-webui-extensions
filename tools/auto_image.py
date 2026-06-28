@@ -5,9 +5,9 @@ description: native image generation and editing tools using built-in image engi
 author_email: nokodo@nokodo.net
 author_url: https://nokodo.net
 funding_url: https://ko-fi.com/nokodo
-repository_url: https://nokodo.net/github/open-webui-extensions
-version: 0.2.1
-required_open_webui_version: >= 0.6.36
+repository_url: https://github.com/hfosse2/open-webui-extensions
+version: 0.3.0
+required_open_webui_version: >= 0.9.0
 requirements:
 license: see extension documentation file `auto_image.md` (License section) for the licensing terms.
 """

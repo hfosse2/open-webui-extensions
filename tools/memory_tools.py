@@ -5,9 +5,9 @@ description: native tools to interact with the built-in memory system
 author_email: nokodo@nokodo.net
 author_url: https://nokodo.net
 funding_url: https://ko-fi.com/nokodo
-repository_url: https://nokodo.net/github/open-webui-extensions
-version: 1.0.0-alpha1
-required_open_webui_version: >= 0.5.0
+repository_url: https://github.com/hfosse2/open-webui-extensions
+version: 1.0.0
+required_open_webui_version: >= 0.9.0
 license: see extension documentation file `memory_tools.md` (License section) for the licensing terms.
 """
 

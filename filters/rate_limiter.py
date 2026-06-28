@@ -2,16 +2,20 @@
 title: Rate Limit Filter
 author: justinh-rahb with improvements by Yanyutin753
 author_url: https://github.com/justinh-rahb
-funding_url: https://github.com/open-webui
-version: 0.2.1
+repository_url: https://github.com/hfosse2/open-webui-extensions
+version: 0.3.0
+required_open_webui_version: >= 0.9.0
 license: MIT
 """
 
+import logging
 import time
 from datetime import datetime, timedelta
 from typing import Optional, Tuple
 
 from pydantic import BaseModel, Field
+
+log = logging.getLogger("rate_limiter")
 
 
 class Filter:
@@ -42,18 +46,16 @@ class Filter:
         )
 
     def __init__(self):
-        self.file_handler = False
         self.valves = self.Valves()
-        self.user_requests = {}
+        self.user_requests: dict[str, dict[str, list[float]]] = {}
 
     def prune_requests(self, user_id: str, model_id: str):
         now = time.time()
 
         if user_id not in self.user_requests:
-            self.user_requests[user_id] = {}  # This remains a dict of model requests
+            self.user_requests[user_id] = {}
 
         if self.valves.global_limit:
-            # Clear all request timestamps for the user.
             self.user_requests[user_id] = {
                 k: [
                     req
@@ -70,7 +72,6 @@ class Filter:
                 for k, v in self.user_requests[user_id].items()
             }
         else:
-            # Clear request timestamps for the specified model only.
             if model_id not in self.user_requests[user_id]:
                 return
 
@@ -97,7 +98,10 @@ class Filter:
                 for req in reqs
                 if time.time() - req < 60
             )
-            if requests_last_minute >= self.valves.requests_per_minute:
+            if (
+                self.valves.requests_per_minute is not None
+                and requests_last_minute >= self.valves.requests_per_minute
+            ):
                 earliest_request = min(
                     req
                     for reqs in user_reqs.values()
@@ -116,7 +120,10 @@ class Filter:
                 for req in reqs
                 if time.time() - req < 3600
             )
-            if requests_last_hour >= self.valves.requests_per_hour:
+            if (
+                self.valves.requests_per_hour is not None
+                and requests_last_hour >= self.valves.requests_per_hour
+            ):
                 earliest_request = min(
                     req
                     for reqs in user_reqs.values()
@@ -136,7 +143,10 @@ class Filter:
                 for req in reqs
                 if time.time() - req < sliding_window_seconds
             )
-            if requests_in_window >= self.valves.sliding_window_limit:
+            if (
+                self.valves.sliding_window_limit is not None
+                and requests_in_window >= self.valves.sliding_window_limit
+            ):
                 earliest_request = min(
                     req
                     for reqs in user_reqs.values()
@@ -149,7 +159,6 @@ class Filter:
                     requests_in_window,
                 )
 
-        # Process requests for a specific model.
         if (
             user_id not in self.user_requests
             or model_id not in self.user_requests[user_id]
@@ -158,7 +167,10 @@ class Filter:
 
         user_reqs = self.user_requests[user_id][model_id]
         requests_last_minute = sum(1 for req in user_reqs if time.time() - req < 60)
-        if requests_last_minute >= self.valves.requests_per_minute:
+        if (
+            self.valves.requests_per_minute is not None
+            and requests_last_minute >= self.valves.requests_per_minute
+        ):
             earliest_request = min(req for req in user_reqs if time.time() - req < 60)
             return (
                 True,
@@ -167,7 +179,10 @@ class Filter:
             )
 
         requests_last_hour = sum(1 for req in user_reqs if time.time() - req < 3600)
-        if requests_last_hour >= self.valves.requests_per_hour:
+        if (
+            self.valves.requests_per_hour is not None
+            and requests_last_hour >= self.valves.requests_per_hour
+        ):
             earliest_request = min(req for req in user_reqs if time.time() - req < 3600)
             return (
                 True,
@@ -179,7 +194,10 @@ class Filter:
         requests_in_window = sum(
             1 for req in user_reqs if time.time() - req < sliding_window_seconds
         )
-        if requests_in_window >= self.valves.sliding_window_limit:
+        if (
+            self.valves.sliding_window_limit is not None
+            and requests_in_window >= self.valves.sliding_window_limit
+        ):
             earliest_request = min(
                 req for req in user_reqs if time.time() - req < sliding_window_seconds
             )
@@ -198,16 +216,12 @@ class Filter:
             self.user_requests[user_id][model_id] = []
         self.user_requests[user_id][model_id].append(time.time())
 
-    def inlet(
+    async def inlet(
         self,
         body: dict,
         __user__: Optional[dict] = None,
         __model__: Optional[dict] = None,
     ) -> dict:
-        print(f"inlet:{__name__}")
-        print(f"inlet:body:{body}")
-        print(f"inlet:user:{__user__}")
-
         if __user__ is not None and (
             __user__.get("role") != "admin" or self.valves.enabled_for_admins
         ):
