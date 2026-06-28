@@ -1,8 +1,8 @@
 """
 title: Auto Memory
-author: Roni Laukkarinen
+author: Halvard Fosse
 description: Automatically identify, retrieve and store memories.
-repository_url: https://github.com/ronilaukkarinen/open-webui-memory
+repository_url: https://github.com/hfosse2/open-webui-extensions
 version: 4.0.0
 required_open_webui_version: >= 0.9.0
 """
